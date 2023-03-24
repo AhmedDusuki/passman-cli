@@ -18,7 +18,7 @@ make clean
 
 ### Requirements
 
-Requires [argon2.h](https://github.com/P-H-C/phc-winner-argon2/blob/master/include/argon2.h) in the same directory, as well as libargon2.so.
+Requires [argon2.h](https://github.com/P-H-C/phc-winner-argon2/blob/master/include/argon2.h) in the same directory, as well as libargon2.a.
 You can follow the instructions on [Argon2's github](https://github.com/P-H-C/phc-winner-argon2) to generate the library for your system.
 
 ## Usage

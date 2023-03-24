@@ -6,7 +6,7 @@ CC = g++
 all: main
 
 main:
-	$(CC) main.cpp libargon2.so -o pman
+	$(CC) main.cpp libargon2.a -o pman
 
 clean:
 	rm -f pman
