@@ -30,7 +30,7 @@ You can follow the instructions on [Argon2's github](https://github.com/P-H-C/ph
 `-i iterations` - default 8  
 This is the number of iterations the algorithm is run.
 
-`-m memory` - default 18 (256MB)  
+`-m memory` - default 17 (128MB)  
 This is the memory required to efficiently use the algorithm, you should aim to maximize this for your system.  
 To use 64MB, you would do `-m 16`, megabytes used = `2^m`.
 
