@@ -1,5 +1,6 @@
 #include "argon2.h"
 #include <iostream>
+#include <iomanip>
 #include <getopt.h>
 #include <sstream>
 #include <string.h>
@@ -80,11 +81,11 @@ int main(int argc, char *argv[])
     uint8_t *pwd = new uint8_t[pwdlen];
     memcpy(pwd, argv[optind + 2], pwdlen);
 
-    uint32_t saltlen = strlen(argv[optind]) +
-                       strlen(argv[optind + 1]) +
-                       strlen(argv[optind + 3]) +
-                       1;
-    uint8_t *salt = new uint8_t[saltlen];
+    uint32_t salt_len = strlen(argv[optind]) +
+                        strlen(argv[optind + 1]) +
+                        strlen(argv[optind + 3]) +
+                        1;
+    uint8_t *salt = new uint8_t[salt_len];
     memcpy(salt,
            argv[optind],
            strlen(argv[optind]));
@@ -96,14 +97,14 @@ int main(int argc, char *argv[])
            strlen(argv[optind + 3]) + 1);
 
     argon2_context context = {
-        hash,        /* output array, at least HASHLEN in size */
-        HASHLEN,     /* digest length */
-        pwd,         /* password array */
-        pwdlen - 1,  /* password length without null byte*/
-        salt,        /* salt array */
-        saltlen - 1, /* salt length without null byte*/
-        NULL, 0,     /* optional secret data */
-        NULL, 0,     /* optional associated data */
+        hash,         /* output array, at least HASHLEN in size */
+        HASHLEN,      /* digest length */
+        pwd,          /* password array */
+        pwdlen - 1,   /* password length without null byte*/
+        salt,         /* salt array */
+        salt_len - 1, /* salt length without null byte*/
+        NULL, 0,      /* optional secret data */
+        NULL, 0,      /* optional associated data */
         argon2_config.t_cost, argon2_config.m_cost, argon2_config.parallelism, argon2_config.parallelism,
         ARGON2_VERSION_13, /* algorithm version */
         NULL, NULL,        /* custom memory allocation / deallocation functions */
@@ -113,13 +114,18 @@ int main(int argc, char *argv[])
     int rc = argon2id_ctx(&context);
     if (ARGON2_OK != rc)
     {
-        printf("Error: %s\n", argon2_error_message(rc));
+        std::cerr << "Error: " << argon2_error_message(rc) << std::endl;
         exit(1);
     }
 
+    memset(salt, 0, salt_len); // clear salt from memory
+
+    std::cout << std::hex << std::setfill('0');
     for (int i = 0; i < HASHLEN; ++i)
-        printf("%02x", hash[i]);
-    printf("\n");
+        std::cout << std::setw(2) << (int)hash[i];
+    std::cout << std::endl;
+
+    memset(hash, 0, HASHLEN); // clear hash from memory
 
     delete (pwd);
     delete (salt);
